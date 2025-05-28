@@ -113,7 +113,7 @@ function SafetyList() {
 ]
 )
   const deleteUser = (id) => {
-    setUsers(users.filter(item => item.id !== id));
+    setUsers(pre=>pre.filter(item => item.id !== id));
   }
 
   return (
