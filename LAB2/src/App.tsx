@@ -3,7 +3,7 @@ import TaskManager from './TaskManager';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/main.scss';
 
-function App() {
+function App(): React.ReactElement {
   return <TaskManager />;
 }
 

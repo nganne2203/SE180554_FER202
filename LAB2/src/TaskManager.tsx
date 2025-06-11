@@ -5,38 +5,56 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import './styles/main.scss';
 
-// Validation schema
+interface Task {
+  id: number;
+  firstName: string;
+  lastName: string;
+  description: string;
+  status: string;
+  createdAt: string;
+  permissions?: {
+    edit?: boolean;
+    delete?: boolean;
+  };
+}
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  description?: string;
+  status: string;
+  dueDate: string;
+  editPermission?: boolean;
+  deletePermission?: boolean;
+}
 const schema = yup.object({
   firstName: yup.string().min(6, 'First name must be at least 6 characters').required('First name is required'),
   lastName: yup.string().min(6, 'Last name must be at least 6 characters').required('Last name is required'),
   status: yup.string().required('Status is required'),
   dueDate: yup.string().required('Due date is required'),
-  // Permission fields are optional
-  editPermission: yup.boolean(),
-  deletePermission: yup.boolean(),
+  editPermission: yup.boolean().optional(),
+  deletePermission: yup.boolean().optional(),
 });
 
-const TaskManager = () => {
-  const [show, setShow] = useState(false);
-  const [activeTab, setActiveTab] = useState('todo');
-  const [tasks, setTasks] = useState([
+const TaskManager: React.FC = () => {
+  const [show, setShow] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>('todo');
+  const [tasks, setTasks] = useState<Task[]>([
     { id: 1, firstName: 'Jacob', lastName: '', description: '@fat', status: 'Jacob', createdAt: '@fat' },
     { id: 2, firstName: 'Larry', lastName: 'the Bird', description: '@twitter', status: 'Jacob', createdAt: '@fat' }
-  ]);
-
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
-    resolver: yupResolver(schema)
+  ]);  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+    resolver: yupResolver(schema) as any
   });
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setShow(false);
     reset();
   };
   
-  const handleShow = () => setShow(true);
+  const handleShow = (): void => setShow(true);
 
-  const onSubmit = (data) => {
-    const newTask = {
+  const onSubmit = (data: FormData): void => {
+    const newTask: Task = {
       id: tasks.length + 1,
       firstName: data.firstName,
       lastName: data.lastName,
@@ -78,7 +96,8 @@ const TaskManager = () => {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-           </div>
+         
+        </div>
         
         <div className="table-header">
           <Button variant="primary" onClick={handleShow} className="create-task-btn">
@@ -99,7 +118,7 @@ const TaskManager = () => {
               </tr>
             </thead>
             <tbody>
-{tasks.map(task => (
+              {tasks.map(task => (
                 <tr key={task.id}>
                   <td>
                     <Button variant="link" size="sm" className="action-btn edit-btn">
@@ -119,7 +138,7 @@ const TaskManager = () => {
           </Table>
         </div>
       </div>
-      <Modal show={show} onHide={handleClose} size="md" centered className="create-task-modal">
+      <Modal show={show} onHide={handleClose} size="lg" centered className="create-task-modal">
         <Modal.Header closeButton className="modal-header-custom">
           <Modal.Title>Create Task</Modal.Title>
         </Modal.Header>
@@ -140,6 +159,7 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
+
             <div className="form-group">
               <Form.Label>Last name</Form.Label>
               <Form.Control
@@ -155,6 +175,7 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
+
             <div className="form-group">
               <Form.Label>Status</Form.Label>
               <Form.Select
@@ -174,6 +195,7 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
+
             <div className="form-group">
               <Form.Label>Due Date</Form.Label>
               <Form.Control
@@ -189,6 +211,7 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
+
             <div className="form-group">
               <Form.Label>Permission</Form.Label>
               <div className="permission-checkboxes">
