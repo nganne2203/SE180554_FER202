@@ -118,14 +118,13 @@ const TaskManager = () => {
             </tbody>
           </Table>
         </div>
-      </div>      {/* Create Task Modal */}
+      </div>
       <Modal show={show} onHide={handleClose} size="md" centered className="create-task-modal">
         <Modal.Header closeButton className="modal-header-custom">
           <Modal.Title>Create Task</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Modal.Body className="modal-body-custom">
-            {/* First Name */}
             <div className="form-group">
               <Form.Label>First name</Form.Label>
               <Form.Control
@@ -141,8 +140,6 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
-
-            {/* Last Name */}
             <div className="form-group">
               <Form.Label>Last name</Form.Label>
               <Form.Control
@@ -158,8 +155,6 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
-
-            {/* Status */}
             <div className="form-group">
               <Form.Label>Status</Form.Label>
               <Form.Select
@@ -179,8 +174,6 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
-
-            {/* Due Date */}
             <div className="form-group">
               <Form.Label>Due Date</Form.Label>
               <Form.Control
@@ -196,8 +189,6 @@ const TaskManager = () => {
                 </div>
               )}
             </div>
-
-            {/* Permission */}
             <div className="form-group">
               <Form.Label>Permission</Form.Label>
               <div className="permission-checkboxes">
