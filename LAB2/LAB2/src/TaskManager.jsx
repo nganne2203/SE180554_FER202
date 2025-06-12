@@ -5,56 +5,38 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import './styles/main.scss';
 
-interface Task {
-  id: number;
-  firstName: string;
-  lastName: string;
-  description: string;
-  status: string;
-  createdAt: string;
-  permissions?: {
-    edit?: boolean;
-    delete?: boolean;
-  };
-}
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  description?: string;
-  status: string;
-  dueDate: string;
-  editPermission?: boolean;
-  deletePermission?: boolean;
-}
+// Validation schema
 const schema = yup.object({
   firstName: yup.string().min(6, 'First name must be at least 6 characters').required('First name is required'),
   lastName: yup.string().min(6, 'Last name must be at least 6 characters').required('Last name is required'),
   status: yup.string().required('Status is required'),
   dueDate: yup.string().required('Due date is required'),
-  editPermission: yup.boolean().optional(),
-  deletePermission: yup.boolean().optional(),
+  // Permission fields are optional
+  editPermission: yup.boolean(),
+  deletePermission: yup.boolean(),
 });
 
-const TaskManager: React.FC = () => {
-  const [show, setShow] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<string>('todo');
-  const [tasks, setTasks] = useState<Task[]>([
+const TaskManager = () => {
+  const [show, setShow] = useState(false);
+  const [activeTab, setActiveTab] = useState('todo');
+  const [tasks, setTasks] = useState([
     { id: 1, firstName: 'Jacob', lastName: '', description: '@fat', status: 'Jacob', createdAt: '@fat' },
     { id: 2, firstName: 'Larry', lastName: 'the Bird', description: '@twitter', status: 'Jacob', createdAt: '@fat' }
-  ]);  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
-    resolver: yupResolver(schema) as any
+  ]);
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    resolver: yupResolver(schema)
   });
 
-  const handleClose = (): void => {
+  const handleClose = () => {
     setShow(false);
     reset();
   };
   
-  const handleShow = (): void => setShow(true);
+  const handleShow = () => setShow(true);
 
-  const onSubmit = (data: FormData): void => {
-    const newTask: Task = {
+  const onSubmit = (data) => {
+    const newTask = {
       id: tasks.length + 1,
       firstName: data.firstName,
       lastName: data.lastName,
@@ -96,8 +78,7 @@ const TaskManager: React.FC = () => {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-         
-        </div>
+           </div>
         
         <div className="table-header">
           <Button variant="primary" onClick={handleShow} className="create-task-btn">
@@ -118,7 +99,7 @@ const TaskManager: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {tasks.map(task => (
+{tasks.map(task => (
                 <tr key={task.id}>
                   <td>
                     <Button variant="link" size="sm" className="action-btn edit-btn">
@@ -137,13 +118,14 @@ const TaskManager: React.FC = () => {
             </tbody>
           </Table>
         </div>
-      </div>
-      <Modal show={show} onHide={handleClose} size="lg" centered className="create-task-modal">
+      </div>      {/* Create Task Modal */}
+      <Modal show={show} onHide={handleClose} size="md" centered className="create-task-modal">
         <Modal.Header closeButton className="modal-header-custom">
           <Modal.Title>Create Task</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Modal.Body className="modal-body-custom">
+            {/* First Name */}
             <div className="form-group">
               <Form.Label>First name</Form.Label>
               <Form.Control
@@ -160,6 +142,7 @@ const TaskManager: React.FC = () => {
               )}
             </div>
 
+            {/* Last Name */}
             <div className="form-group">
               <Form.Label>Last name</Form.Label>
               <Form.Control
@@ -176,6 +159,7 @@ const TaskManager: React.FC = () => {
               )}
             </div>
 
+            {/* Status */}
             <div className="form-group">
               <Form.Label>Status</Form.Label>
               <Form.Select
@@ -196,6 +180,7 @@ const TaskManager: React.FC = () => {
               )}
             </div>
 
+            {/* Due Date */}
             <div className="form-group">
               <Form.Label>Due Date</Form.Label>
               <Form.Control
@@ -212,6 +197,7 @@ const TaskManager: React.FC = () => {
               )}
             </div>
 
+            {/* Permission */}
             <div className="form-group">
               <Form.Label>Permission</Form.Label>
               <div className="permission-checkboxes">
